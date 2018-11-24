@@ -30,3 +30,8 @@ encoder.fit(train_lbl)
 outputs = encoder.transform(train_lbl)
 
 print(train_lbl[0], outputs[0])
+
+model.fit(inputs, outputs, epochs=1, batch_size=100)
+
+
+

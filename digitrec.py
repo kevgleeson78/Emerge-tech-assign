@@ -34,4 +34,24 @@ print(train_lbl[0], outputs[0])
 model.fit(inputs, outputs, epochs=1, batch_size=100)
 
 
+with gzip.open('data/t10k-images-idx3-ubyte.gz', 'rb') as f:
+    test_img = f.read()
+
+with gzip.open('data/t10k-labels-idx1-ubyte.gz', 'rb') as f:
+    test_lbl = f.read()
+
+test_img = ~np.array(list(test_img[16:])).reshape(10000, 784).astype(np.uint8) / 255.0
+test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
+
+(encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
+
+test = model.predict(test_img[0:1])
+
+print(test)
+# Get the maximum value from the array and
+pred_result = test.argmax(axis=1)
+
+print("The machine prediction is : =>> ",  pred_result)
+print("The actual number is : =>> ", test_lbl[0:1])
+
 

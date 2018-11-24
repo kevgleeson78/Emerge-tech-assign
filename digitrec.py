@@ -24,3 +24,9 @@ train_img = ~np.array(list(train_img[16:])).reshape(60000, 28, 28).astype(np.uin
 train_lbl =  np.array(list(train_lbl[ 8:])).astype(np.uint8)
 
 inputs = train_img.reshape(60000, 784)
+
+encoder = pre.LabelBinarizer()
+encoder.fit(train_lbl)
+outputs = encoder.transform(train_lbl)
+
+print(train_lbl[0], outputs[0])

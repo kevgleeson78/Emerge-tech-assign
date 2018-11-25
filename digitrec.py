@@ -7,6 +7,7 @@ import numpy as np
 # Import sklearn for categorising each digit
 import sklearn.preprocessing as pre
 
+# The code in this script was mainly Adapted from: https://raw.githubusercontent.com/ianmcloughlin/jupyter-teaching-notebooks/master/mnist.ipynb
 # Start a neural network, building it by layers.
 model = kr.models.Sequential()
 
@@ -18,7 +19,9 @@ model.add(kr.layers.Dense(units=10, activation='softmax'))
 
 # Build the graph.
 model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+
 # Open the gzipped files and read as bytes.
+#Adapted from : https://docs.python.org/2/library/gzip.html
 with gzip.open('data/train-images-idx3-ubyte.gz', 'rb') as f:
     train_img = f.read()
 
@@ -49,7 +52,9 @@ for i in range(10):
 # The batch_size value is the amount of images sent at one time to the network
 model.fit(inputs, outputs, epochs=20, batch_size=100)
 
+
 # open the gzipped test images and labels
+#Adapted from : https://docs.python.org/2/library/gzip.html
 with gzip.open('data/t10k-images-idx3-ubyte.gz', 'rb') as f:
     test_img = f.read()
 
@@ -57,6 +62,7 @@ with gzip.open('data/t10k-labels-idx1-ubyte.gz', 'rb') as f:
     test_lbl = f.read()
 
 # Store each image and label into memory
+# Adapted from: https://raw.githubusercontent.com/ianmcloughlin/jupyter-teaching-notebooks/master/mnist.ipynb
 test_img = ~np.array(list(test_img[16:])).reshape(10000, 784).astype(np.uint8) / 255.0
 test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 

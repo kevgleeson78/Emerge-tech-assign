@@ -1,57 +1,75 @@
+# import keras for building the nural network
 import keras as kr
+# Import gzip for unpacking the images and labels
 import gzip
+# Import numpy
 import numpy as np
+# Import sklearn for categorising each digit
 import sklearn.preprocessing as pre
 
 # Start a neural network, building it by layers.
 model = kr.models.Sequential()
 
 # Add a hidden layer with 1000 neurons and an input layer with 784.
-model.add(kr.layers.Dense(units=1000, activation='relu', input_dim=784))
-# Add a three neuron output layer.
+# There are 784 input neurons as this value is equal to the total amount of bytes each image has.
+model.add(kr.layers.Dense(units=100, activation='relu', input_dim=784))
+# Add ten neurons to the output layer
 model.add(kr.layers.Dense(units=10, activation='softmax'))
 
 # Build the graph.
-model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
-
+test1 = model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+# Open the gzipped files and read as bytes.
 with gzip.open('data/train-images-idx3-ubyte.gz', 'rb') as f:
     train_img = f.read()
 
 with gzip.open('data/train-labels-idx1-ubyte.gz', 'rb') as f:
     train_lbl = f.read()
-    
+# read in all images and labels into memory
 train_img = ~np.array(list(train_img[16:])).reshape(60000, 28, 28).astype(np.uint8) / 255.0
 train_lbl =  np.array(list(train_lbl[ 8:])).astype(np.uint8)
 
+# Flatten the array so the inputs can be mapped to the input neurons
 inputs = train_img.reshape(60000, 784)
-
+# encode the labels into binary format
 encoder = pre.LabelBinarizer()
+# get the size of the array needed for each category
 encoder.fit(train_lbl)
+# encode each label to be used as binary outputs
 outputs = encoder.transform(train_lbl)
-
+# print out the integer value and the new representation of the number
 print(train_lbl[0], outputs[0])
 
-model.fit(inputs, outputs, epochs=1, batch_size=100)
+# print out each array
+for i in range(10):
+    print(i, encoder.transform([i]))
 
+# Start the training
+# Set the model up by adding the input and output layers to the network
+#The epochs value is the amount of test runs are needed
+# THe batch_size value is the amount of images sent at one time to the network
+model.fit(inputs, outputs, epochs=20, batch_size=100)
 
+# open the gzipped test images and labels
 with gzip.open('data/t10k-images-idx3-ubyte.gz', 'rb') as f:
     test_img = f.read()
 
 with gzip.open('data/t10k-labels-idx1-ubyte.gz', 'rb') as f:
     test_lbl = f.read()
 
+# Store each image and albel into memory
 test_img = ~np.array(list(test_img[16:])).reshape(10000, 784).astype(np.uint8) / 255.0
 test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 
-(encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
+# Print out the accuracy
+print((encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum())
 
-test = model.predict(test_img[0:1])
-
+test = model.predict(test_img[128:129])
+# Print the
 print(test)
-# Get the maximum value from the array and
+# Get the maximum value from the machine predictions
 pred_result = test.argmax(axis=1)
 
 print("The machine prediction is : =>> ",  pred_result)
-print("The actual number is : =>> ", test_lbl[0:1])
+print("The actual number is : =>> ", test_lbl[128:129])
 
 

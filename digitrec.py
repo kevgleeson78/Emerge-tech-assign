@@ -17,7 +17,7 @@ model.add(kr.layers.Dense(units=100, activation='relu', input_dim=784))
 model.add(kr.layers.Dense(units=10, activation='softmax'))
 
 # Build the graph.
-test1 = model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
 # Open the gzipped files and read as bytes.
 with gzip.open('data/train-images-idx3-ubyte.gz', 'rb') as f:
     train_img = f.read()
@@ -26,7 +26,7 @@ with gzip.open('data/train-labels-idx1-ubyte.gz', 'rb') as f:
     train_lbl = f.read()
 # read in all images and labels into memory
 train_img = ~np.array(list(train_img[16:])).reshape(60000, 28, 28).astype(np.uint8) / 255.0
-train_lbl =  np.array(list(train_lbl[ 8:])).astype(np.uint8)
+train_lbl =  np.array(list(train_lbl[8:])).astype(np.uint8)
 
 # Flatten the array so the inputs can be mapped to the input neurons
 inputs = train_img.reshape(60000, 784)
@@ -46,7 +46,7 @@ for i in range(10):
 # Start the training
 # Set the model up by adding the input and output layers to the network
 #The epochs value is the amount of test runs are needed
-# THe batch_size value is the amount of images sent at one time to the network
+# The batch_size value is the amount of images sent at one time to the network
 model.fit(inputs, outputs, epochs=20, batch_size=100)
 
 # open the gzipped test images and labels

@@ -12,7 +12,7 @@ model = kr.models.Sequential()
 
 # Add a hidden layer with 1000 neurons and an input layer with 784.
 # There are 784 input neurons as this value is equal to the total amount of bytes each image has.
-model.add(kr.layers.Dense(units=100, activation='relu', input_dim=784))
+model.add(kr.layers.Dense(units=1000, activation='relu', input_dim=784))
 # Add ten neurons to the output layer
 model.add(kr.layers.Dense(units=10, activation='softmax'))
 
@@ -56,20 +56,28 @@ with gzip.open('data/t10k-images-idx3-ubyte.gz', 'rb') as f:
 with gzip.open('data/t10k-labels-idx1-ubyte.gz', 'rb') as f:
     test_lbl = f.read()
 
-# Store each image and albel into memory
+# Store each image and label into memory
 test_img = ~np.array(list(test_img[16:])).reshape(10000, 784).astype(np.uint8) / 255.0
 test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 
-# Print out the accuracy
-print((encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum())
+# Print out the prediction
+(encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
 
-test = model.predict(test_img[128:129])
-# Print the
-print(test)
-# Get the maximum value from the machine predictions
-pred_result = test.argmax(axis=1)
+## Get 20 random images form the test set
+# Random int adapted from https://stackoverflow.com/questions/3996904/generate-random-integers-between-0-and-9
+from random import randint
+for i in range(20):
+    print("Test Number : ", i+1,"\n")
+    x = randint(0, 9999)
+    print("The random index: ", x, "\n")
+    print("The result array: ")
+    test = model.predict(test_img[x:x+1])
+    # Print the result array
+    print(test, "\n")
+    # Get the maximum value from the machine predictions
+    pred_result = test.argmax(axis=1)
 
-print("The machine prediction is : =>> ",  pred_result)
-print("The actual number is : =>> ", test_lbl[128:129])
-
+    print("The machine prediction is : =>> ",  pred_result)
+    print("The actual number is : =>> ", test_lbl[x:x+1])
+    print("##############################################")
 

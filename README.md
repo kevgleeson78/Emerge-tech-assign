@@ -1,6 +1,12 @@
 # Emerging Technologies Assignment
 
-This repository holds a python script 
+### This repository holds a python script and four jupyter notebooks.
+* The python script creates a neural netwwork that can read and regognise hand written digits.
+ please see the notebook in this repository for a further explaination.
+* A notebook explaining the numpy random package and an example of some distributions that it uses.
+* A notebook explaining the Iris data set and the difficulty that a neural network might have in classifying teh different species of flower.
+* A notebook explaining the mnist dataset and how to open and read the data efficiently into memory.
+* A notebook explaing each element of the above python script.
 
 Author: [Kevin Gleeson](https://github.com/kevgleeson78)
 

@@ -38,7 +38,7 @@ This will run jupyter and open the explorer in a browser.
 
 From here you can open the notebooks by simply clicking on the notebook you wish to open.
 
-2. To run the code in the notebook on the top menu click "kernel > restart and run all"
+2. The current state of the notebook is saved when first opened. You can clear the state and rerun all cells by goint to the top menu click "kernel > restart and run all"
 This will run all of the cells in the notebook.
 
 ### Running the python script

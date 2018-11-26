@@ -18,5 +18,5 @@ This will open the git command prompt in the folder selected.
  
  3: To clone the repository type the following command in the terminal making sure you are in the folder needed for the repository.
 ```bash
->git clone https://github.com/kevgleeson78/go-guessing-game.git
+>git clone https://github.com/kevgleeson78/Emerge-tech-assign.git
 ```

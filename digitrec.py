@@ -7,6 +7,10 @@ import numpy as np
 # Import sklearn for categorising each digit
 import sklearn.preprocessing as pre
 
+from keras.preprocessing import image
+import matplotlib.pyplot as plt
+import tkinter as tk
+from tkinter import filedialog
 # The code in this script was mainly Adapted from: https://raw.githubusercontent.com/ianmcloughlin/jupyter-teaching-notebooks/master/mnist.ipynb
 # Start a neural network, building it by layers.
 model = kr.models.Sequential()
@@ -45,16 +49,30 @@ print(train_lbl[0], outputs[0])
 # print out each array
 for i in range(10):
     print(i, encoder.transform([i]))
+def train_model():
+    # Start the training
+    # Set the model up by adding the input and output layers to the network
+    #The epochs value is the amount of test runs are needed
+    # The batch_size value is the amount of images sent at one time to the network
+    model.fit(inputs, outputs, epochs=40, batch_size=100)
 
-# Start the training
-# Set the model up by adding the input and output layers to the network
-#The epochs value is the amount of test runs are needed
-# The batch_size value is the amount of images sent at one time to the network
-model.fit(inputs, outputs, epochs=20, batch_size=100)
+    model.save("data/my_model.h5")
+
+
+def load_model():
+    model.load_weights("data/my_model.h5")
+
+
+# adapted from https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model
+option = input("Load model y/n?")
+if option == 'y':
+    load_model()
+elif option == 'n':
+    train_model()
 
 
 # open the gzipped test images and labels
-#Adapted from : https://docs.python.org/2/library/gzip.html
+# Adapted from : https://docs.python.org/2/library/gzip.html
 with gzip.open('data/t10k-images-idx3-ubyte.gz', 'rb') as f:
     test_img = f.read()
 
@@ -67,8 +85,8 @@ test_img = ~np.array(list(test_img[16:])).reshape(10000, 784).astype(np.uint8) /
 test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 
 # Print out the performance of the network
-(encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
-
+performance = (encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
+print("The correct number of predictions", performance)
 ## Get 20 random images form the test set
 # Random int adapted from https://stackoverflow.com/questions/3996904/generate-random-integers-between-0-and-9
 from random import randint
@@ -87,3 +105,26 @@ for i in range(20):
     print("The actual number is : =>> ", test_lbl[x:x+1])
     print("##############################################")
 
+
+# Testing other images
+# input file adapted from https://stackoverflow.com/questions/9319317/quick-and-easy-file-dialog-in-python
+def file_upload():
+    root = tk.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename()
+    # Adapted from https://towardsdatascience.com/basics-of-image-classification-with-keras-43779a299c8b
+    img = image.load_img(path=file_path,color_mode = "grayscale",target_size=(28,28,1))
+
+    imgage1 = np.array(list(image.img_to_array(img))).reshape(1, 784).astype(np.uint8) / 255.0
+    plt.imshow(img)
+    plt.show()
+    test1 = model.predict(imgage1)
+
+    print("The number predicted is : ", test1.argmax(axis=1))
+
+
+upload_img = input("upload image? y/n")
+if upload_img == 'y':
+    file_upload()
+elif upload_img == 'n':
+    exit()

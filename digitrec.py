@@ -68,19 +68,21 @@ def train_model():
     # Set the model up by adding the input and output layers to the network
     #The epochs value is the amount of test runs are needed
     # The batch_size value is the amount of images sent at one time to the network
-    model.fit(inputs, outputs, epochs=40, batch_size=100)
+    model.fit(inputs, outputs, epochs=50, batch_size=100)
 
     # adapted from https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model
     # save the model to a file for future use
     model.save("data/my_model.h5")
 
 
-def load_model():b
+# function for loading the model weights file
+def load_model():
     model.load_weights("data/my_model.h5")
 
 
-option = input("Please choose an option: \n"
-               "Load model = y/ train model = n?")
+# Prompt user to load or re-run the training.
+option = input("Please choose an option and press enter: \n"
+               "Load model = y/ train model = n \n")
 if option == 'y':
     # Adapted from: https://stackoverflow.com/questions/82831/how-do-i-check-whether-a-file-exists-without-exceptions
     # Check if the model file exists
@@ -107,9 +109,9 @@ with gzip.open('data/t10k-labels-idx1-ubyte.gz', 'rb') as f:
 test_img = ~np.array(list(test_img[16:])).reshape(10000, 784).astype(np.uint8) / 255.0
 test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 
-# Print out the performance of the network
+# Show the total number of correct images identified out of 10000 test images
 performance = (encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
-print("The correct number of predictions", performance)
+print("The correct number of predictions: ", performance)
 
 ## Get 20 random images form the test set and pass them to the trained model.
 # Random int adapted from https://stackoverflow.com/questions/3996904/generate-random-integers-between-0-and-9
@@ -141,12 +143,18 @@ def file_upload():
     # tkinter for uploading file
     root = tk.Tk()
     root.withdraw()
+
+    # -topmost, True to ensure the upload screen appears on top of the current window.
+    #Adapted from: https://stackoverflow.com/questions/31778176/how-do-i-get-tkinter-askopenfilename-to-open-on-top-of-other-windows
+    root.attributes("-topmost", True)
+
     # get the file path from the chosen file in the dialog box
     file_path = filedialog.askopenfilename()
 
     # Adapted from https://towardsdatascience.com/basics-of-image-classification-with-keras-43779a299c8b
     # resize the image that has been uploaded
     img = image.load_img(path=file_path,color_mode = "grayscale",target_size=(28,28,1))
+
     # flatten the image
     imgage1 = np.array(list(image.img_to_array(img))).reshape(1, 784).astype(np.uint8) / 255.0
 
@@ -157,10 +165,18 @@ def file_upload():
     print("The number predicted is : ", test1.argmax(axis=1))
 
 
-upload_img = input("upload image? \n"
-                   " press 'y' (to upload)\n"
-                   "press 'n' (to exit)")
-if upload_img == 'y':
-    file_upload()
-elif upload_img == 'n':
-    exit()
+# Boolean for while loop
+keep_running = True
+
+
+while keep_running:
+    upload_img = input("upload image? \n"
+                       " press 'y' + enter (to upload)\n"
+                       "press 'n'  + enter (to exit)")
+
+    if upload_img == 'y':
+        # Call the file_upload function.
+        file_upload()
+    elif upload_img == 'n':
+        # exit the loop.
+        keep_running = False

@@ -16,8 +16,13 @@ from keras.preprocessing import image
 # tkinter for selecting images
 import tkinter as tk
 from tkinter import filedialog
-
+# package to check if file exists
 from pathlib import Path
+
+# For getting random images from the test set.
+from random import randint
+
+
 # The code in this script was mainly Adapted from: https://raw.githubusercontent.com/ianmcloughlin/jupyter-teaching-notebooks/master/mnist.ipynb
 # Start a neural network, building it by layers.
 model = kr.models.Sequential()
@@ -113,9 +118,9 @@ test_lbl =  np.array(list(test_lbl[ 8:])).astype(np.uint8)
 performance = (encoder.inverse_transform(model.predict(test_img)) == test_lbl).sum()
 print("The correct number of predictions: ", performance)
 
-## Get 20 random images form the test set and pass them to the trained model.
+# Get 20 random images form the test set and pass them to the trained model.
 # Random int adapted from https://stackoverflow.com/questions/3996904/generate-random-integers-between-0-and-9
-from random import randint
+
 # Select 20 images
 for i in range(20):
     # The test number
@@ -145,7 +150,7 @@ def file_upload():
     root.withdraw()
 
     # -topmost, True to ensure the upload screen appears on top of the current window.
-    #Adapted from: https://stackoverflow.com/questions/31778176/how-do-i-get-tkinter-askopenfilename-to-open-on-top-of-other-windows
+    # Adapted from: https://stackoverflow.com/questions/31778176/how-do-i-get-tkinter-askopenfilename-to-open-on-top-of-other-windows
     root.attributes("-topmost", True)
 
     # get the file path from the chosen file in the dialog box

@@ -31,7 +31,8 @@ This will open the git command prompt in the folder selected.
 5. Download the four files of the mnist data set [here](http://yann.lecun.com/exdb/mnist/) and save the files into the new data folder
 ### Saved .h5 model file
 For the purpose of demonstration and convenience a pre trained model has been saved in the root of this repository called ‘my_model.h5’. This is a file of a saved training state with 50 epochs run. Once you have cloned this repository move this file to the data folder you have previously created.
-Then when running the digitrec.py script you will be prompted to load the file or re-run the training. If you choose to load the saved model file you can start testing the model straight away.
+Then when running the digitrec.py script you will be prompted to load the file or re-run the training. If you choose to load the saved model file you can start testing the model straight away. If you choose to re-run the training the original file will be overwritten with the new training weights. If you have not put this file into the data folder a new one with the same name will be created.
+
 
 ### Running the notebooks
 1. Cd to the cloned folder and run the command line. When the command line is open type 
